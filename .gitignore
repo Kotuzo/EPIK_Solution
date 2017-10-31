@@ -1,0 +1,9 @@
+__pycache__
+*.pyc
+
+all_data/*
+!all_data/.keep
+*/.ipynb_checkpoints/*
+
+001_anonimized
+search_queries_2016_10_18.csv
