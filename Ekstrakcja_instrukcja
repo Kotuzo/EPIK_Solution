@@ -1,0 +1,8 @@
+Ekstrakcja:
+1) Połączyć wszystkie pliki w jeden, zrobić joina z search_queries (trzeba zwrócic uwagę na datę, żeby trendy pasowały do danych - dla każdego okresu są różne), zakładamy, że lokalnie pliki będą po prostu rozpakowane w all_data (możecie ustalić czy to będzie w folderach, czy flat structure)
+
+2) Parsować kolumnę params, najlepiej chyba utworzyć z niej nowe kolumny, głównie chodzi o cenę i used/new
+
+3) Ekstraktor powinien być konfigurowalny, tak żeby można było sobie wybrać, jakie kolumny chcemy wyciągnać, do pliku wyjściowego
+
+Następny krok to będzie data exploration, albo transformation, bo być może będzie się opłacało zmienić strukturę danych albo wrzucić do bazy danych w celu przetwarzania, jeżeli nie będzie dało się tego w pandasie zrobić. Ale to się okaże.
