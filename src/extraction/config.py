@@ -6,7 +6,7 @@
 #   'predict_sold', 'predict_replies', 'predict_views', 'reply_call',
 #  'reply_sms', 'reply_chat', 'reply_call_intent', 'reply_chat_intent',
 # 'parent_id', 'name_pl']
-columnsAds = ['title']
+columnsAds = ['title', 'name_pl']
 
 # ['phrase', 'category_id', 'sessions_count', 'name_pl', 'parent_id']
 columnsSearchQueries = ['phrase', 'category_id', 'sessions_count', 'name_pl']
