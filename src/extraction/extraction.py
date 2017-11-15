@@ -6,6 +6,7 @@ path = os.getcwd().replace('/src/extraction', '/all_data/')
 
 categories = pd.DataFrame(pd.read_csv(path + os.sep + 'categories.csv', error_bad_lines=False))
 
+
 def searchPathsByStartsWith(startsWith: str):
     paths = []
     for subdir, dir, files in os.walk(path):
@@ -16,14 +17,17 @@ def searchPathsByStartsWith(startsWith: str):
     return paths
 
 
-#TODO remove :5 from loop
+# TODO remove :5 from loop
 def concatCSV(paths):
     return pd.concat([pd.read_csv(p, error_bad_lines=False) for p in paths[:5]])
 
 
 def main():
-    searchQueries = pd.DataFrame(concatCSV(searchPathsByStartsWith('search')))
+    searchQueries = pd.DataFrame(concatCSV(searchPathsByStartsWith('search'))).rename(
+        columns={'Unnamed: 0': 'phrase', 'Unnamed: 1': 'category_id'})[['phrase', 'category_id']]
     print(searchQueries.keys())
+    print(searchQueries)
+
 
 if __name__ == '__main__':
     main()
