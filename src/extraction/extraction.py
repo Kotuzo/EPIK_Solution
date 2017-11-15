@@ -4,7 +4,10 @@ from IPython.display import display, HTML
 
 path = os.getcwd().replace('/src/extraction', '/all_data/')
 
-categories = pd.DataFrame(pd.read_csv(path + os.sep + 'categories.csv')).rename(columns={'id': 'category_id'})
+categories = pd.DataFrame(pd.read_csv(path + os.sep + 'categories.csv'))
+
+
+# .rename(columns={'id': 'category_id'})
 
 
 def searchPathsByStartsWith(startsWith: str):
@@ -20,7 +23,7 @@ def searchPathsByStartsWith(startsWith: str):
 def concatSearchCSV():
     paths = searchPathsByStartsWith('search')
     return pd.DataFrame(pd.concat(
-        [pd.read_csv(p, names=['phrase', 'category_id', 'sessions_count']) for p in paths[:10]]))
+        [pd.read_csv(p, names=['phrase', 'category_id', 'sessions_count']) for p in paths]))
 
 
 def concatAdsCSV():
@@ -30,16 +33,11 @@ def concatAdsCSV():
 
 
 def main():
-    searchQueries = concatSearchCSV()
-    # print(searchQueries)
-    # print(searchQueries.keys())
-    # print(categories.keys())
-    test = searchQueries.merge(categories, on='category_id', how='inner', suffixes=('_sq', '_cat'))
-    print(test.keys())
-    print(test)
-    # print(test[['category_id_sq', 'category_id_cat']])
-    test.to_csv(
-        path + os.sep + 'test.csv', index=False)
+    # searchQueries = concatSearchCSV()
+    ads = concatAdsCSV()
+    # test = searchQueries.merge(categories, left_on='category_id', right_on='parent_id', how='left', suffixes=('_sq', '_cat'))
+    test1 = ads.merge(categories, left_on='category_id', right_on='id', how='inner', suffixes=('_ads', '_cat'))
+    print(test1[['id_ads', 'id_cat']])
 
 
 if __name__ == '__main__':
