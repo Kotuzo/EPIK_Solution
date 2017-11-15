@@ -22,7 +22,7 @@ def searchPathsByStartsWith(startsWith: str):
 def searchQueriesFromCSV():
     paths = searchPathsByStartsWith('search')
     return pd.DataFrame(pd.concat(
-        [pd.read_csv(p, names=conf.columnsSearchQueries) for p in paths]))
+        [pd.read_csv(p, names=conf.columnNamesSearchQueries) for p in paths]))
 
 
 def adsFromCSV():
@@ -41,7 +41,6 @@ def toCSV(df, columns, filename):
 def main():
     toCSV(pd.merge(searchQueriesFromCSV(), categories, on='category_id'), conf.columnsSearchQueries, 'search')
     toCSV(pd.merge(adsFromCSV(), categories, on='category_id'), conf.columnsAds, 'ads')
-
 
 if __name__ == '__main__':
     main()

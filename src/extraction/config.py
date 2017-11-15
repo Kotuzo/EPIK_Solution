@@ -10,3 +10,4 @@ columnsAds = ['title']
 
 # ['phrase', 'category_id', 'sessions_count', 'name_pl', 'parent_id']
 columnsSearchQueries = ['phrase', 'category_id', 'sessions_count', 'name_pl']
+columnNamesSearchQueries = ['phrase', 'category_id', 'sessions_count']
