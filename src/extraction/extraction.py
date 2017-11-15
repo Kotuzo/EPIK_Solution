@@ -2,7 +2,7 @@ import pandas as pd
 import os
 from IPython.display import display, HTML
 
-path = os.getcwd().replace('/src/extraction', '/all_data/')
+path = os.getcwd().replace('/src/extraction', '/all_data/').replace("\\src\\extraction", "\\all_data\\")
 
 categories = pd.DataFrame(pd.read_csv(path + os.sep + 'categories.csv'))
 
