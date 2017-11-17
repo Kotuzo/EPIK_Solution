@@ -17,6 +17,15 @@ def findPathsByStartsWith(startsWith):
     return paths
 
 
+def findDirsByStartsWith(startsWith):
+    dirs = []
+    for subdir, dir, files in os.walk(path):
+        if not subdir.startswith(extractedPath):
+            if (subdir.__contains__(startsWith)):
+                dirs.append(subdir)
+    return dirs
+
+
 def findCharIndexesInString(s, ch):
     return [i for i, ltr in enumerate(s) if ltr == ch]
 

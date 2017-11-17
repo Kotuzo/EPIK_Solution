@@ -2,11 +2,19 @@ import pandas as pd
 import common as common
 import config as conf
 
+
 def convertCSVToDataFrame():
-    paths = common.findPathsByStartsWith('search')
-    prepareCSV(paths)
-    return pd.DataFrame(pd.concat(
-        [pd.read_csv(p, names=conf.namesOfSearchQueriesColumns) for p in paths]))
+    dirs = common.findDirsByStartsWith('search')
+    for d in dirs:
+        paths = common.findPathsByStartsWith(d[:-25])
+        print(paths)
+        prepareCSV(paths)
+        searchQueriesCategories = pd.merge(convertCSVToDataFrame(), common.categories, on='category_id')
+        df = pd.DataFrame(pd.concat(
+            [pd.read_csv(p, names=conf.namesOfSearchQueriesColumns) for p in paths]))
+        print('sauron')
+        common.convertDataFrameToCSV(df, conf.columnsSearchQueries, d[:-9])
+
 
 def prepareCSV(paths):
     for path in paths:
@@ -27,12 +35,11 @@ def prepareCSV(paths):
         with open(path, 'w', encoding='utf-8') as f:
             f.write(tempString)
 
+
 def groupBy(df):
     return df.filter(['category_id', 'sorting_date', 'sessions_count', 'name_pl'], axis=1).groupby(
         ['category_id', 'sorting_date', 'name_pl']).mean().reset_index()
 
+
 def extractSearchQueries():
-    # searchQueriesCategories = groupBy(pd.merge(convertCSVToDataFrame(), common.categories, on='category_id'))
-    searchQueriesCategories = pd.merge(convertCSVToDataFrame(), common.categories, on='category_id')
-    searchQueriesCategories['category_id'] = searchQueriesCategories['category_id'].astype(int)
-    return searchQueriesCategories
+    convertCSVToDataFrame()
