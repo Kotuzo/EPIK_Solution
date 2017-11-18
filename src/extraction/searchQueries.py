@@ -1,20 +1,9 @@
 import pandas as pd
 import common as common
 import config as conf
+import os
 
-
-def convertCSVToDataFrame():
-    dirs = common.findDirsByStartsWith('search')
-    for d in dirs:
-        paths = common.findPathsByStartsWith(d[:-25])
-        print(paths)
-        prepareCSV(paths)
-        searchQueriesCategories = pd.merge(convertCSVToDataFrame(), common.categories, on='category_id')
-        df = pd.DataFrame(pd.concat(
-            [pd.read_csv(p, names=conf.namesOfSearchQueriesColumns) for p in paths]))
-        print('sauron')
-        common.convertDataFrameToCSV(df, conf.columnsSearchQueries, d[:-9])
-
+startsWith = 'search_queries'
 
 def prepareCSV(paths):
     for path in paths:
@@ -42,4 +31,10 @@ def groupBy(df):
 
 
 def extractSearchQueries():
-    convertCSVToDataFrame()
+    dirs = common.findDirsByStartsWith(startsWith)
+    for d in dirs:
+        paths = common.findPathsByStartsWith(startsWith, d)
+        df = pd.DataFrame(pd.concat(
+            [pd.read_csv(p, names=conf.namesOfSearchQueriesColumns) for p in paths]))
+        searchQueriesCategories = pd.merge(df, common.categories, on='category_id')
+        common.convertDataFrameToCSV(searchQueriesCategories, conf.columnsSearchQueries, d[-25:-3])

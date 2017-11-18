@@ -6,9 +6,9 @@ extractedPath = path + 'extracted'
 categories = pd.DataFrame(pd.read_csv(path + os.sep + 'categories.csv')).rename(columns={'id': 'category_id'})
 
 
-def findPathsByStartsWith(startsWith):
+def findPathsByStartsWith(startsWith, defaultDir=path):
     paths = []
-    for subdir, dir, files in os.walk(path):
+    for subdir, dir, files in os.walk(defaultDir):
         for file in files:
             if not subdir.startswith(extractedPath):
                 filepath = subdir + os.sep + file

@@ -4,17 +4,16 @@ import ads as a
 import searchQueries as s
 import common as common
 
+# To Place:
+# Ads files in all_data
+# Categories.vsc in all_data
+# SearchQueries in unziped in all_data, .gz removed
+# Result in extracted f.g ads_YYYY_MM , search_queries_YYYY_MM
+# Selecting extracted columns by config.py
 
 def main():
     s.extractSearchQueries()
-    # ads = a.extractAds()
-    # print(ads.keys())
-
-    #TODO: why it doesn't merge
-    # final = pd.merge(ads, searchQueries, on=['sorting_date', 'category_id'], how='right')
-
-    # common.convertDataFrameToCSV(ads, conf.columnsAds, 'ads')
-    # common.convertDataFrameToCSV(final, conf.finalColumns, 'final')
+    a.extractAds()
 
 if __name__ == '__main__':
     main()
