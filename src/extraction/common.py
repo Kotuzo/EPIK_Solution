@@ -1,9 +1,13 @@
 import os
 import pandas as pd
+import config as conf
 
-path = os.getcwd().replace('/src/extraction', '/all_data/').replace("\\src\\extraction", "\\all_data\\")
+path = os.getcwd().replace('/src/extraction', '/all_data/') \
+    .replace("\\src\\extraction", "\\all_data \\")
+
 extractedPath = path + 'extracted'
-categories = pd.DataFrame(pd.read_csv(path + os.sep + 'categories.csv')).rename(columns={'id': 'category_id'})
+categories = pd.DataFrame(pd.read_csv(
+    path + os.sep + 'categories.csv')).rename(columns={'id': 'category_id'})
 
 
 def findPathsByStartsWith(startsWith, defaultDir=path):
@@ -33,4 +37,8 @@ def findCharIndexesInString(s, ch):
 def convertDataFrameToCSV(df, columns, filename):
     if not os.path.exists(extractedPath):
         os.makedirs(extractedPath)
-    pd.DataFrame(df[columns]).to_csv(extractedPath + os.sep + filename + '.csv', index=False)
+    the_path = extractedPath + os.sep + filename + '.csv'
+    try:
+        pd.DataFrame(df[columns]).to_csv(the_path, index=False)
+    except KeyError:
+        pd.DataFrame(df[conf.columnsAdsTest]).to_csv(the_path, index=False)
