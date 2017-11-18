@@ -1,9 +1,11 @@
 import pandas as pd
 import common as common
 import config as conf
-import os
+import sys
+
 
 startsWith = 'search_queries'
+
 
 def prepareCSV(paths):
     for path in paths:
@@ -26,15 +28,29 @@ def prepareCSV(paths):
 
 
 def groupBy(df):
-    return df.filter(['category_id', 'sorting_date', 'sessions_count', 'name_pl'], axis=1).groupby(
-        ['category_id', 'sorting_date', 'name_pl']).mean().reset_index()
+    filter_cols = ['category_id', 'sorting_date', 'sessions_count', 'name_pl']
+    groupby_cols = ['category_id', 'sorting_date', 'name_pl']
+    return df.filter(filter_cols, axis=1).groupby(
+        groupby_cols).mean().reset_index()
 
 
 def extractSearchQueries():
     dirs = common.findDirsByStartsWith(startsWith)
-    for d in dirs:
+    print('extracting search queries')
+
+    for i, d in enumerate(dirs, start=1):
         paths = common.findPathsByStartsWith(startsWith, d)
+        sys.stdout.write('\r %i/%i parts processed' % (i, len(dirs)))
+        sys.stdout.flush()
+
         df = pd.DataFrame(pd.concat(
-            [pd.read_csv(p, names=conf.namesOfSearchQueriesColumns) for p in paths]))
-        searchQueriesCategories = pd.merge(df, common.categories, on='category_id')
-        common.convertDataFrameToCSV(searchQueriesCategories, conf.columnsSearchQueries, d[-25:-3])
+            [pd.read_csv(p, names=conf.namesOfSearchQueriesColumns)
+             for p in paths]))
+
+        searchQueriesCategories = pd.merge(df,
+                                           common.categories,
+                                           on='category_id')
+
+        common.convertDataFrameToCSV(searchQueriesCategories,
+                                     conf.columnsSearchQueries,
+                                     d[-25:-3])
