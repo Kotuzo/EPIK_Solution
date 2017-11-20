@@ -5,5 +5,7 @@ all_data/*
 !all_data/.keep
 */.ipynb_checkpoints/*
 
+sample_data/*
+
 001_anonimized
 search_queries_2016_10_18.csv
