@@ -37,7 +37,7 @@ def findCharIndexesInString(s, ch):
 def convertDataFrameToCSV(df, columns, filename):
     if not os.path.exists(extractedPath):
         os.makedirs(extractedPath)
-    the_path = extractedPath + os.sep + filename + '.csv'
+    the_path = extractedPath + os.sep + 'extracted_' + filename + '.csv'
     try:
         pd.DataFrame(df[columns]).to_csv(the_path, index=False)
     except KeyError:

@@ -16,6 +16,8 @@ columnsAds = ['id', 'region_id', 'category_id', 'subregion_id', 'district_id',
               'reply_sms', 'reply_chat', 'reply_call_intent', 'reply_chat_intent',
               'parent_id', 'name_pl']
 
+columnsParams = ['priceType', 'price', 'state', 'type', 'mark', 'size']
+
 columnsAdsTest = ['id', 'region_id', 'category_id', 'subregion_id', 'district_id',
               	  'city_id', 'accurate_location', 'user_id', 'sorting_date',
 	              'created_at_first', 'valid_to', 'title', 'description',
