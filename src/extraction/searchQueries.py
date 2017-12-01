@@ -3,7 +3,6 @@ import common as common
 import config as conf
 import sys
 
-
 startsWith = 'search_queries'
 
 

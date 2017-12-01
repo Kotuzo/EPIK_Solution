@@ -37,3 +37,8 @@ columnsSearchQueries = ['sorting_date', 'phrase', 'category_id', 'sessions_count
 finalColumns = ['title', 'category_id', 'sorting_date', 'sessions_count']
 
 namesOfSearchQueriesColumns = ['sorting_date', 'phrase', 'category_id', 'sessions_count']
+
+# config for transformation
+transformationSQColumns = ['category_id', 'derivative', 'average', 'min', 'max']
+
+
