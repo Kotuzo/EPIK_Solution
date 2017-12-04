@@ -35,10 +35,11 @@ def groupBy(df):
 
 def extractSearchQueries():
     dirs = common.findDirsByStartsWith(startsWith)
-    print('extracting search queries')
+    print('\nextracting search queries')
 
     for i, d in enumerate(dirs, start=1):
         paths = common.findPathsByStartsWith(startsWith, d)
+        prepareCSV(paths)
         sys.stdout.write('\r %i/%i parts processed' % (i, len(dirs)))
         sys.stdout.flush()
 

@@ -10,7 +10,7 @@ categories = pd.DataFrame(pd.read_csv(
     path + os.sep + 'categories.csv')).rename(columns={'id': 'category_id'})
 
 
-def findPathsByStartsWith(startsWith, defaultDir=path, transform = False):
+def findPathsByStartsWith(startsWith, defaultDir=path, transform=False):
     paths = []
     for subdir, dir, files in os.walk(defaultDir):
         for file in files:
@@ -19,7 +19,6 @@ def findPathsByStartsWith(startsWith, defaultDir=path, transform = False):
                 if (file.startswith(startsWith)):
                     paths.append(filepath)
     return paths
-
 
 def findDirsByStartsWith(startsWith, transform=False):
     dirs = []

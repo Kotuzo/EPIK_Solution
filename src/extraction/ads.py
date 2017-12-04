@@ -26,7 +26,7 @@ def paramsDataFrame(df):
 
 def extractAds():
     paths = common.findPathsByStartsWith('ads')
-    print('extracting ads')
+    print('\nextracting ads')
     for i, p in enumerate(paths, start=1):
         sys.stdout.write('\r %i/%i files processed' % (i, len(paths)))
         sys.stdout.flush()
