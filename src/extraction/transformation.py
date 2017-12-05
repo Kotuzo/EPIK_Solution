@@ -30,7 +30,7 @@ def fix_nans_with_avg(vals):
             temp.append(mean)
         else:
             temp.append(v)
-    return temp
+    return np.array(temp)
 
 
 def get_derivative_of_ts(vals):
@@ -48,6 +48,7 @@ def get_statistic_data(cat, df, stat_data):
     Y = np.array(list(temp_ts))
     if not np.all(np.isnan(Y)):
         derivative = get_derivative_of_ts(Y)
+        Y = fix_nans_with_avg(Y)
         stat_data.loc[-1] = [cat, derivative, Y.mean(), Y.min(), Y.max()]
         stat_data.index = stat_data.index + 1
         stat_data = stat_data.reset_index(drop=True)
@@ -57,7 +58,7 @@ def get_statistic_data(cat, df, stat_data):
 def transformation_search_queries():
     dirs = commn.findDirsByStartsWith(dirStartsWith, True)
 
-    print('\n')
+    print('\ntransformation search queries')
     for d in dirs:
         paths = commn.findPathsByStartsWith(pathStartsWithSearch, d, True)
         for i, p in enumerate(paths, start=1):
@@ -83,6 +84,6 @@ def merge_with_ads():
             transformPath = commn.findPathsByStartsWith(startsWith, d, True)
             dfTransform = pd.read_csv(transformPath[0])
             dfAds = pd.read_csv(p)
-            dfAdsTransform = pd.merge(dfAds, dfTransform, on='category_id', how='right')
+            dfAdsTransform = pd.merge(dfAds, dfTransform, on='category_id', how='left')
             commn.convertDataFrameToCSV(dfAdsTransform, conf.columnsAds + conf.columnsParams + conf.columnsSQ,
                                         nameAds + '_' + p[-11:-4])
