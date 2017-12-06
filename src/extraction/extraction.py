@@ -15,6 +15,7 @@ def main():
     a.extractAds()
     ts.transformation_search_queries()
     ts.merge_with_ads()
+    ts.final_transformation()
 
 
 def extraction_mode(mode):
@@ -23,7 +24,8 @@ def extraction_mode(mode):
         'only_ads': a.extractAds,
         'only_search_queries': s.extractSearchQueries,
         'only_transformation': ts.transformation_search_queries,
-        'only_ads_transform': ts.merge_with_ads
+        'only_ads_transform': ts.merge_with_ads,
+        'final_transformation': ts.final_transformation()
     }
     return modes[mode]()
 

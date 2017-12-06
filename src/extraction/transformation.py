@@ -11,9 +11,11 @@ import config as conf
 dirStartsWith = 'extracted'
 nameTransform = 'transformationSQ_'
 nameAds = 'adsTransformSQ'
+nameFinal = 'final_'
 pathStartsWithSearch = dirStartsWith + '_search'
 pathStartsWithAds = dirStartsWith + '_ads'
 pathStartsWithTransform = dirStartsWith + '_' + nameTransform
+pathStartsWithFinal = dirStartsWith + '_' + nameAds
 X = sm.add_constant(np.arange(14))
 
 
@@ -87,3 +89,36 @@ def merge_with_ads():
             dfAdsTransform = pd.merge(dfAds, dfTransform, on='category_id', how='left')
             commn.convertDataFrameToCSV(dfAdsTransform, conf.columnsAds + conf.columnsParams + conf.columnsSQ,
                                         nameAds + '_' + p[-11:-4])
+
+
+def final_transformation():
+    dirs = commn.findDirsByStartsWith(dirStartsWith, True)
+    print('\nfinal transformation')
+
+    for d in dirs:
+        paths = commn.findPathsByStartsWith(pathStartsWithFinal, d, True)
+        for i, p in enumerate(paths, start=1):
+            sys.stdout.write('\r %i/%i parts processed' % (i, len(paths)))
+
+            df = pd.read_csv(p)
+            df = dropColumnsNotIn(df, ['id', 'has_phone', 'private_business', 'predict_sold', 'predict_replies',
+                                       'predict_views', 'priceType', 'price', 'state', 'derivative', 'average', 'min',
+                                       'max'])
+            df.rename(columns={'price': 'priceValue'}, inplace=True)
+            df = replaceDummies(df, ['has_phone', 'private_business', 'priceType', 'state'])
+            df.dropna(inplace=True)
+            commn.convertDataFrameToCSV(df, conf.finalTransformColumns, nameFinal + p[-11:-4])
+
+
+def replaceDummies(df, columns):
+    for c in columns:
+        df = pd.concat([df, pd.get_dummies(df[c])], axis=1)
+        df.drop([c], axis=1, inplace=True)
+    return df
+
+
+def dropColumnsNotIn(df, columns):
+    for c in df.keys():
+        if c not in columns:
+            df.drop([c], axis=1, inplace=True)
+    return df
