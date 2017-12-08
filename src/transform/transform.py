@@ -8,14 +8,6 @@ from sklearn.linear_model import LinearRegression
 import common as commn
 import config as conf
 
-dirStartsWith = 'extracted'
-nameTransform = 'transformationSQ_'
-nameAds = 'adsTransformSQ'
-nameFinal = 'final_'
-pathStartsWithSearch = dirStartsWith + '_search'
-pathStartsWithAds = dirStartsWith + '_ads'
-pathStartsWithTransform = dirStartsWith + '_' + nameTransform
-pathStartsWithFinal = dirStartsWith + '_' + nameAds
 X = sm.add_constant(np.arange(14))
 
 
@@ -58,55 +50,52 @@ def get_statistic_data(cat, df, stat_data):
 
 
 def transformation_search_queries():
-    dirs = commn.findDirsByStartsWith(dirStartsWith, True)
-
     print('\ntransformation search queries')
-    for d in dirs:
-        paths = commn.findPathsByStartsWith(pathStartsWithSearch, d, True)
-        for i, p in enumerate(paths, start=1):
-            sys.stdout.write('\r %i/%i parts processed' % (i, len(paths)))
-            df = pd.read_csv(p, parse_dates=['sorting_date'])
-            df_cat = df['category_id'].drop_duplicates().dropna()
-            df = df.set_index('sorting_date')
-            stat_data = pd.DataFrame(columns=conf.columnsSQ)
-            for cat in df_cat:
-                stat_data = get_statistic_data(cat, df, stat_data)
-            commn.convertDataFrameToCSV(stat_data, conf.columnsSQ, nameTransform + p[-11:-4])
+    paths = commn.find_search_queries_paths()
+    for i, p in enumerate(paths, start=1):
+        sys.stdout.write('\r %i/%i parts processed' % (i, len(paths)))
+        sys.stdout.flush()
+        df = pd.read_csv(p, parse_dates=['sorting_date'])
+        df_cat = df['category_id'].drop_duplicates().dropna()
+        df = df.set_index('sorting_date')
+        stat_data = pd.DataFrame(columns=conf.columnsSQ)
+        for cat in df_cat:
+            stat_data = get_statistic_data(cat, df, stat_data)
+        commn.save_data_frame(stat_data, conf.columnsSQ, get_transformed_name_from_path(p))
 
 
-def merge_with_ads():
-    dirs = commn.findDirsByStartsWith(dirStartsWith, True)
-
+def merge_transformed_with_ads():
     print('\nmerge transformation and ads')
-    for d in dirs:
-        pathsAds = commn.findPathsByStartsWith(pathStartsWithAds, d, True)
-        for i, p in enumerate(pathsAds, start=1):
-            sys.stdout.write('\r %i/%i parts processed' % (i, len(pathsAds)))
-            startsWith = pathStartsWithTransform + p[-11:]
-            transformPath = commn.findPathsByStartsWith(startsWith, d, True)
-            dfTransform = pd.read_csv(transformPath[0])
-            dfAds = pd.read_csv(p)
-            dfAdsTransform = pd.merge(dfAds, dfTransform, on='category_id', how='left')
-            commn.convertDataFrameToCSV(dfAdsTransform, conf.columnsAds + conf.columnsParams + conf.columnsSQ,
-                                        nameAds + '_' + p[-11:-4])
+    pathsAds = commn.find_ads_paths()
+    for i, p in enumerate(pathsAds, start=1):
+        sys.stdout.write('\r %i/%i parts processed' % (i, len(pathsAds)))
+        sys.stdout.flush()
+        startsWith = get_transformed_name_from_path(p)
+        print(startsWith)
+        transformPath = commn.find_transformed_file_starts_with(startsWith)
+        dfTransform = pd.read_csv(transformPath[0])
+        dfAds = pd.read_csv(p)
+        dfAdsTransform = pd.merge(dfAds, dfTransform, on='category_id', how='left')
+        commn.save_data_frame(dfAdsTransform, conf.columnsAds + conf.columnsParams + conf.columnsSQ,
+                              startsWith)
+
+
+def get_transformed_name_from_path(path):
+    return "transformed" + path[-11:-4]
 
 
 def final_transformation():
-    dirs = commn.findDirsByStartsWith(dirStartsWith, True)
     print('\nfinal transformation')
-
-    for d in dirs:
-        paths = commn.findPathsByStartsWith(pathStartsWithFinal, d, True)
-        for i, p in enumerate(paths, start=1):
-            sys.stdout.write('\r %i/%i parts processed' % (i, len(paths)))
-
-            df = pd.read_csv(p)
-            df = dropColumnsNotIn(df, ['id', 'has_phone', 'private_business', 'predict_sold', 'predict_replies',
-                                       'predict_views', 'priceType', 'price', 'state', 'derivative', 'average', 'min',
-                                       'max'])
-            df = replaceDummies(df, ['has_phone', 'private_business', 'priceType', 'state'])
-            df.dropna(inplace=True)
-            commn.convertDataFrameToCSV(df, conf.finalTransformColumns, nameFinal + p[-11:-4])
+    paths = commn.find_transformed_file_starts_with("transformed")
+    for i, p in enumerate(paths, start=1):
+        sys.stdout.write('\r %i/%i parts processed' % (i, len(paths)))
+        df = pd.read_csv(p)
+        df = dropColumnsNotIn(df, ['id', 'has_phone', 'private_business', 'predict_sold', 'predict_replies',
+                                   'predict_views', 'priceType', 'priceValue', 'state', 'derivative', 'average', 'min',
+                                   'max'])
+        df = replaceDummies(df, ['has_phone', 'private_business', 'priceType', 'state'])
+        df.dropna(inplace=True)
+        commn.save_data_frame(df, conf.finalTransformColumns, get_transformed_name_from_path(p))
 
 
 def replaceDummies(df, columns):
@@ -121,3 +110,13 @@ def dropColumnsNotIn(df, columns):
         if c not in columns:
             df.drop([c], axis=1, inplace=True)
     return df
+
+
+def main():
+    transformation_search_queries()
+    merge_transformed_with_ads()
+    final_transformation()
+
+
+if __name__ == '__main__':
+    main()

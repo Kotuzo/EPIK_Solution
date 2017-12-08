@@ -1,5 +1,5 @@
 
-EXTRACTION_MODE = 'all'  # all/only_ads/only_search_queries/only_transformation/only_ads_transform
+EXTRACTION_MODE = 'all'  # all/only_ads/only_search_queries
 
 columnsAds = ['id', 'region_id', 'category_id', 'subregion_id', 'district_id',
               'city_id', 'accurate_location', 'user_id', 'sorting_date',

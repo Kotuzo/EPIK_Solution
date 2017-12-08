@@ -13,7 +13,6 @@ def replace_unhappy_commas_and_add_dates_to_csv(paths):
         with open(path, 'r', encoding='utf-8') as f:
             date = "\"" + f.name[-14:-4] + "\","
             date = date.replace('_', '-')
-            start = time.clock()
             for line in f:
                 commaIndexes = common.findCharIndexesInString(line, ',')
                 if not line.startswith(date):
@@ -24,7 +23,6 @@ def replace_unhappy_commas_and_add_dates_to_csv(paths):
                             temp[i] = '.'
                             line = "".join(temp)
                 tempString += line
-            print(time.clock() - start)
         with open(path, 'w', encoding='utf-8') as f:
             f.write(tempString)
 
