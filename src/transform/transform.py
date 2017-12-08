@@ -104,7 +104,6 @@ def final_transformation():
             df = dropColumnsNotIn(df, ['id', 'has_phone', 'private_business', 'predict_sold', 'predict_replies',
                                        'predict_views', 'priceType', 'price', 'state', 'derivative', 'average', 'min',
                                        'max'])
-            df.rename(columns={'price': 'priceValue'}, inplace=True)
             df = replaceDummies(df, ['has_phone', 'private_business', 'priceType', 'state'])
             df.dropna(inplace=True)
             commn.convertDataFrameToCSV(df, conf.finalTransformColumns, nameFinal + p[-11:-4])

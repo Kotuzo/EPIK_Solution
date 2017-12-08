@@ -1,7 +1,6 @@
-import ads as a
-import searchQueries as s
+import extraction_ads as a
+import extraction_search_queries as s
 import config as conf
-import transformation as ts
 
 # To Place:
 # Ads files in all_data
@@ -11,21 +10,14 @@ import transformation as ts
 # Selecting extracted columns by config.py
 
 def main():
-    s.extractSearchQueries()
-    a.extractAds()
-    ts.transformation_search_queries()
-    ts.merge_with_ads()
-    ts.final_transformation()
-
+    s.extract_search_queries()
+    a.extract_ads()
 
 def extraction_mode(mode):
     modes = {
         'all': main,
-        'only_ads': a.extractAds,
-        'only_search_queries': s.extractSearchQueries,
-        'only_transformation': ts.transformation_search_queries,
-        'only_ads_transform': ts.merge_with_ads,
-        'final_transformation': ts.final_transformation()
+        'only_ads': a.extract_ads,
+        'only_search_queries': s.extract_search_queries,
     }
     return modes[mode]()
 

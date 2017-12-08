@@ -5,12 +5,14 @@ import sys
 
 pd.options.display.max_colwidth = 100
 
+startsWith = "ads"
 
-def removeTimeFromDateTime(df, columnName):
+
+def remove_time_from_sorting_date(df, columnName):
     return pd.to_datetime(df[columnName]).dt.date
 
 
-def paramsDataFrame(df):
+def transform_params_column_into_records(df):
     s = df.str.replace('price<', 'priceType<', 1).str.split('<br>')
     d = []
     for w in s:
@@ -24,15 +26,16 @@ def paramsDataFrame(df):
     return pd.DataFrame.from_records(d, index=df.index, columns=cols)
 
 
-def extractAds():
-    paths = common.findPathsByStartsWith('ads')
+def extract_ads():
+    paths = common.find_files_in_directory_starts_with('ads')
     print('\nextracting ads')
     for i, p in enumerate(paths, start=1):
         sys.stdout.write('\r %i/%i files processed' % (i, len(paths)))
         sys.stdout.flush()
         df = pd.read_csv(p)
-        params = paramsDataFrame(df['params'])
+        params = transform_params_column_into_records(df['params'])
         df = pd.merge(df, params, left_index=True, right_index=True)
-        df['sorting_date'] = removeTimeFromDateTime(df, 'sorting_date')
+        df['sorting_date'] = remove_time_from_sorting_date(df, 'sorting_date')
+        df.rename(columns={'price': 'priceValue'}, inplace=True)
         ads = pd.merge(df, common.categories, on='category_id')
-        common.convertDataFrameToCSV(ads, conf.columnsAds + conf.columnsParams, p[-14:-3])
+        common.save_data_frame(ads, conf.columnsAds + conf.columnsParams, p[-14:-3], startsWith)
