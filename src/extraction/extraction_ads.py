@@ -30,8 +30,8 @@ def extract_ads():
     paths = common.find_files_in_directory_starts_with('ads')
     print('\nextracting ads')
     for i, p in enumerate(paths, start=1):
-        print(p)
         sys.stdout.write('\r %i/%i files processed' % (i, len(paths)))
+        print(p)
         sys.stdout.flush()
         df = pd.read_csv(p)
         params = transform_params_column_into_records(df['params'])

@@ -37,10 +37,12 @@ def findCharIndexesInString(s, ch):
 def save_data_frame(df, columns, filename, directory_name):
     create_directory_if_not_exists(extractedPath + directory_name)
     the_path = extractedPath + directory_name + os.sep + filename + '.csv'
+    print("\nSaving " + the_path)
     try:
         pd.DataFrame(df[columns]).to_csv(the_path, index=False)
     except KeyError:
-        pd.DataFrame(df[conf.columnsAdsTest]).to_csv(the_path, index=False)
+        print("\nTest set " + path)
+        pd.DataFrame(df[conf.columnsAdsTest + conf.columnsParams]).to_csv(the_path, index=False)
 
 def create_directory_if_not_exists(directory):
     if not os.path.exists(directory):

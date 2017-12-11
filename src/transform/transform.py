@@ -53,12 +53,13 @@ def transformation_search_queries():
     print('\ntransformation search queries')
     paths = commn.find_search_queries_paths()
     for i, p in enumerate(paths, start=1):
-        sys.stdout.write('\r %i/%i parts processed' % (i, len(paths)))
+        sys.stdout.write('\r %i/%i parts processed ' % (i, len(paths)))
         sys.stdout.flush()
         df = pd.read_csv(p, parse_dates=['sorting_date'])
         df_cat = df['category_id'].drop_duplicates().dropna()
         df = df.set_index('sorting_date')
         stat_data = pd.DataFrame(columns=conf.columnsSQ)
+        print("\nStatistic data")
         for cat in df_cat:
             stat_data = get_statistic_data(cat, df, stat_data)
         commn.save_data_frame(stat_data, conf.columnsSQ, get_transformed_name_from_path(p))
@@ -71,7 +72,6 @@ def merge_transformed_with_ads():
         sys.stdout.write('\r %i/%i parts processed' % (i, len(pathsAds)))
         sys.stdout.flush()
         startsWith = get_transformed_name_from_path(p)
-        print(startsWith)
         transformPath = commn.find_transformed_file_starts_with(startsWith)
         dfTransform = pd.read_csv(transformPath[0])
         dfAds = pd.read_csv(p)
@@ -95,7 +95,7 @@ def final_transformation():
                                    'max'])
         df = replaceDummies(df, ['has_phone', 'private_business', 'priceType', 'state'])
         df.dropna(inplace=True)
-        commn.save_data_frame(df, conf.finalTransformColumns, get_transformed_name_from_path(p))
+        commn.save_data_frame(df, conf.finalTransformColumns, get_transformed_name_from_path(p), True)
 
 
 def replaceDummies(df, columns):

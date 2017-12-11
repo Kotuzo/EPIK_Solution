@@ -8,6 +8,7 @@ startsWith = 'search_queries'
 
 
 def replace_unhappy_commas_and_add_dates_to_csv(paths):
+    print("\nreplacing unhappy commas")
     for path in paths:
         tempString = ''
         with open(path, 'r', encoding='utf-8') as f:
@@ -31,10 +32,10 @@ def extract_search_queries():
     dirs = common.find_directories_starts_with(startsWith)
     print('\nextracting search queries')
     for i, d in enumerate(dirs, start=1):
-        paths = common.find_files_in_directory_starts_with(startsWith, d)
-        replace_unhappy_commas_and_add_dates_to_csv(paths)
         sys.stdout.write('\r %i/%i parts processed' % (i, len(dirs)))
         sys.stdout.flush()
+        paths = common.find_files_in_directory_starts_with(startsWith, d)
+        replace_unhappy_commas_and_add_dates_to_csv(paths)
 
         df = pd.DataFrame(pd.concat(
             [pd.read_csv(p, names=conf.namesOfSearchQueriesColumns)

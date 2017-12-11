@@ -48,13 +48,19 @@ def findCharIndexesInString(s, ch):
     return [i for i, ltr in enumerate(s) if ltr == ch]
 
 
-def save_data_frame(df, columns, filename):
+def save_data_frame(df, columns, filename, transform=False):
     create_directory_if_not_exists(transformationDir)
     the_path = transformationDir + os.sep + filename + '.csv'
+    print(df.keys())
+    print(columns)
     try:
         pd.DataFrame(df[columns]).to_csv(the_path, index=False)
     except KeyError:
-        pd.DataFrame(df[conf.columnsAdsTest]).to_csv(the_path, index=False)
+        print("\nTest Set " + the_path)
+        if not transform:
+            pd.DataFrame(df[conf.columnsAdsTest + conf.columnsParams + conf.columnsSQ]).to_csv(the_path, index=False)
+        else:
+            pd.DataFrame(df[conf.columnsFinalTransformColumnsTest]).to_csv(the_path, index=False)
 
 
 def create_directory_if_not_exists(directory):
