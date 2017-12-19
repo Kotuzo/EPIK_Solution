@@ -90,7 +90,7 @@ def final_transformation():
     for i, p in enumerate(paths, start=1):
         sys.stdout.write('\r %i/%i parts processed' % (i, len(paths)))
         df = pd.read_csv(p)
-        df = dropColumnsNotIn(df, ['id', 'has_phone', 'private_business', 'predict_sold', 'predict_replies',
+        df = dropColumnsNotIn(df, ['id', 'has_phone','private_business', 'predict_sold', 'predict_replies',
                                    'predict_views', 'priceType', 'priceValue', 'state', 'derivative', 'average', 'min',
                                    'max'])
         df = replaceDummies(df, ['private_business', 'priceType', 'state'])
