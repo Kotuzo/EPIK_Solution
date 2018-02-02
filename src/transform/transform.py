@@ -90,11 +90,12 @@ def final_transformation():
     for i, p in enumerate(paths, start=1):
         sys.stdout.write('\r %i/%i parts processed' % (i, len(paths)))
         df = pd.read_csv(p)
-        df = dropColumnsNotIn(df, ['id', 'has_phone','private_business', 'predict_sold', 'predict_replies',
-                                   'predict_views', 'priceType', 'priceValue', 'state', 'derivative', 'average', 'min',
-                                   'max'])
+        print('dropping columns...')
+        df = dropColumnsNotIn(df, ['id', 'category_id', 'title', 'description', 'has_phone','private_business', 'predict_sold', 'predict_replies', 'predict_views', 'priceType', 'priceValue', 'state', 'derivative', 'average', 'min', 'max', 'photo_sizes', 'paidads_id_index', 'paidads_valid_to'])
+
+        print('replacing dummies...\n')
         df = replaceDummies(df, ['private_business', 'priceType', 'state'])
-        df.dropna(inplace=True)
+        #df.dropna(inplace=True)
         commn.save_data_frame(df, conf.finalTransformColumns, get_transformed_name_from_path(p), True)
 
 
