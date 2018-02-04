@@ -131,8 +131,8 @@ def main():
 def extraction_mode(mode):
     modes = {
         'all': main,
-        'transform': transform(),
-        'words_per_category': wpc.run(),
+        'transform': transform,
+        'words_per_category': wpc.run,
     }
     return modes[mode]()
 
