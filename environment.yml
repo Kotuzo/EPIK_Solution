@@ -1,0 +1,13 @@
+name: data-ninja
+
+dependencies:
+    - python=3.6
+    - numpy
+    - matplotlib
+    - pandas
+    - scipy
+    - scikit-learn
+    - seaborn
+    - tensorflow
+    - keras
+    - statsmodels
