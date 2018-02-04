@@ -7,6 +7,7 @@ from sklearn.linear_model import LinearRegression
 
 import common as commn
 import config as conf
+import wordsPerCategory as wpc
 
 X = sm.add_constant(np.arange(14))
 
@@ -91,11 +92,14 @@ def final_transformation():
         sys.stdout.write('\r %i/%i parts processed' % (i, len(paths)))
         df = pd.read_csv(p)
         print('dropping columns...')
-        df = dropColumnsNotIn(df, ['id', 'category_id', 'title', 'description', 'has_phone','private_business', 'predict_sold', 'predict_replies', 'predict_views', 'priceType', 'priceValue', 'state', 'derivative', 'average', 'min', 'max', 'photo_sizes', 'paidads_id_index', 'paidads_valid_to'])
+        df = dropColumnsNotIn(df, ['id', 'category_id', 'title', 'description', 'has_phone', 'private_business',
+                                   'predict_sold', 'predict_replies', 'predict_views', 'priceType', 'priceValue',
+                                   'state', 'derivative', 'average', 'min', 'max', 'photo_sizes', 'paidads_id_index',
+                                   'paidads_valid_to'])
 
         print('replacing dummies...\n')
         df = replaceDummies(df, ['private_business', 'priceType', 'state'])
-        #df.dropna(inplace=True)
+        # df.dropna(inplace=True)
         commn.save_data_frame(df, conf.finalTransformColumns, get_transformed_name_from_path(p), True)
 
 
@@ -113,11 +117,25 @@ def dropColumnsNotIn(df, columns):
     return df
 
 
-def main():
+def transform():
     transformation_search_queries()
     merge_transformed_with_ads()
     final_transformation()
 
 
+def main():
+    transform()
+    wpc.run()
+
+
+def extraction_mode(mode):
+    modes = {
+        'all': main,
+        'transform': transform(),
+        'words_per_category': wpc.run(),
+    }
+    return modes[mode]()
+
+
 if __name__ == '__main__':
-    main()
+    extraction_mode(conf.EXTRACTION_MODE)
