@@ -1,3 +1,5 @@
+EXTRACTION_MODE = 'words_per_category'
+
 columnsSQ = ['category_id', 'derivative', 'average', 'min', 'max']
 
 finalTransformColumns = ['id', 'predict_sold', 'predict_replies', 'predict_views', 'priceValue', 'derivative',
@@ -24,3 +26,7 @@ columnsAdsTest = ['id', 'region_id', 'category_id', 'subregion_id', 'district_id
 columnsFinalTransformColumnsTest = ['id', 'priceValue', 'derivative', 'average', 'min', 'max',
                                     'business', 'private', 'arranged', 'exchange', 'free', 'price', 'new',
                                     'used']
+
+numberOfTopOccurredWords = 4
+
+columnsOfOccurredWords = ['category_id', 'phrase']

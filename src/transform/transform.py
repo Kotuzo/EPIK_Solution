@@ -7,6 +7,7 @@ from sklearn.linear_model import LinearRegression
 
 import common as commn
 import config as conf
+import wordsPerCategory as wpc
 
 X = sm.add_constant(np.arange(14))
 
@@ -90,7 +91,7 @@ def final_transformation():
     for i, p in enumerate(paths, start=1):
         sys.stdout.write('\r %i/%i parts processed' % (i, len(paths)))
         df = pd.read_csv(p)
-        df = dropColumnsNotIn(df, ['id', 'has_phone','private_business', 'predict_sold', 'predict_replies',
+        df = dropColumnsNotIn(df, ['id', 'has_phone', 'private_business', 'predict_sold', 'predict_replies',
                                    'predict_views', 'priceType', 'priceValue', 'state', 'derivative', 'average', 'min',
                                    'max'])
         df = replaceDummies(df, ['private_business', 'priceType', 'state'])
@@ -112,11 +113,26 @@ def dropColumnsNotIn(df, columns):
     return df
 
 
-def main():
+def transform():
     transformation_search_queries()
     merge_transformed_with_ads()
     final_transformation()
 
 
+def main():
+    transform()
+    wpc.run()
+
+
+def extractionModes(mode):
+    print(mode)
+    modes = {
+        'all': main,
+        'transform': transform,
+        'words_per_category': wpc.run,
+    }
+    return modes[mode]()
+
+
 if __name__ == '__main__':
-    main()
+    extractionModes(conf.EXTRACTION_MODE)

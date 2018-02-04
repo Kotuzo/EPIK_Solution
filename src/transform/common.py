@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import config as conf
 
+
 path = os.getcwd().replace('/src/transform', '/all_data/') \
     .replace("\\src\\transform", "\\all_data\\")
 
