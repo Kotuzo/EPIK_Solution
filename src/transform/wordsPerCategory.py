@@ -15,7 +15,8 @@ def all_sq_to_df():
         result = pd.read_csv(p, usecols=['phrase', 'category_id', 'sessions_count'])
         result = occurrence_per_cat(result)
         commn.save_data_frame(result, conf.columnsOfOccurredWords,
-                              'occurredWordsTop_' + str(conf.numberOfTopOccurredWords) + p[-11:-4], transform=False)
+                              'occurredWordsTop' + str(conf.numberOfTopOccurredWords) + "_" + p[-11:-4],
+                              transform=False)
 
 
 def replace_nan_by_empty(df):
@@ -51,7 +52,7 @@ def occurrence_per_cat(df):
                     words[word] = words.get(word, 0) + row['sessions_count']
         top_words = sorted(words.items(), key=lambda x: x[1], reverse=True)[:conf.numberOfTopOccurredWords]
         top_word_cat = pd.DataFrame(list(dict(top_words).items()),
-                                                        columns=['phrase', 'sessions_count'])
+                                    columns=['phrase', 'sessions_count'])
         top_word_cat['category_id'] = cat
         df_top_words = pd.concat([df_top_words, top_word_cat], ignore_index=True)
     return df_top_words
