@@ -14,9 +14,11 @@ def all_sq_to_df():
         result = pd.DataFrame([])
         result = pd.read_csv(p, usecols=['phrase', 'category_id', 'sessions_count'])
         result = occurrence_per_cat(result)
+        fileName = 'occurredWordsTop' + str(conf.numberOfTopOccurredWords) + "_" + p[-11:-4]
         commn.save_data_frame(result, conf.columnsOfOccurredWords,
-                              'occurredWordsTop' + str(conf.numberOfTopOccurredWords) + "_" + p[-11:-4],
+                              fileName,
                               transform=False)
+        print("saved to file: " + fileName)
 
 
 def replace_nan_by_empty(df):
