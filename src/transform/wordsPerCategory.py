@@ -43,8 +43,8 @@ def occurrence_per_cat(df):
     words = {}
     categories = get_categories(df)
     df_top_words = pd.DataFrame(columns=['phrase', 'sessions_count', 'category_id'])
-    for i, cat in enumerate(categories[:2], start=1):
-        sys.stdout.write('\r %i / %i processed\n' % (i, len(categories)))
+    for i, cat in enumerate(categories, start=1):
+        sys.stdout.write('\r %i / %i processed' % (i, len(categories)))
         for _, row in df[(df['category_id'] == cat)][['phrase', 'sessions_count']].dropna().iterrows():
             for word in row['phrase'].split():
                 word = word.strip(punctuation).lower()
