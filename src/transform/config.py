@@ -27,5 +27,5 @@ columnsFinalTransformColumnsTest = ['id', 'category_id', 'title', 'description',
                                     'used', 'photo_sizes', 'paidads_id_index', 'paidads_valid_to']
 
 numberOfTopOccurredWords = 20
-columnsOfOccurredWords = ['category_id', 'phrase']
+columnsOfOccurredWords = ['category_id', 'phrase', 'sessions_count']
 EXTRACTION_MODE = 'words_per_category'

@@ -3,13 +3,19 @@ import pandas as pd
 import config as conf
 import common as commn
 import numpy as np
+from string import punctuation
+import sys
 
 
 def all_sq_to_df():
     paths = commn.find_search_queries_paths()
     result = pd.DataFrame([])
-    for p in paths[:1]:
-        result = result.append(pd.read_csv(p, usecols=['phrase', 'category_id']))
+    for p in paths:
+        print(p)
+        result = result.append(pd.read_csv(p, usecols=['phrase', 'category_id', 'sessions_count']))
+        result = occurrence_per_cat(result)
+        commn.save_data_frame(result, conf.columnsOfOccurredWords,
+                              'occurredWordsTop_' + str(conf.numberOfTopOccurredWords) + p[-11:-4], transform=False)
     return result
 
 
@@ -23,42 +29,40 @@ def concat_phrase_per_cat(df):
     return result
 
 
+def get_stop_words():
+    stop_words = []
+    with open('../learn/polish_stopwords.txt', 'r', encoding="utf-8") as f:
+        stop_words = [line[:-1] for line in f]
+    numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    stop_words += numbers
+    return stop_words
+
+
 def occurrence_per_cat(df):
-    df = df.set_index('category_id')
-    for index, row in df.iterrows():
-        print(index)
-        words = row['phrase'].split(',')
-        uniques = []
-        for word in words:
-            if word not in uniques:
-                uniques.append(str(word))
-        counts = []
-        for unique in uniques:
-            count = 0
-            for word in words:
-                if word == unique:
-                    count += 1
-            counts.append((count, str(unique)))
-
-        counts.sort()
-        counts.reverse()
-        wordCountMap = {}
-        for i in range(min(conf.numberOfTopOccurredWords, len(counts))):
-            count, word = counts[i]
-            wordCountMap[word] = count
-        print(wordCountMap)
-        df.at[index, 'phrase'] = wordCountMap
-    return df.reset_index()
+    stop_words = get_stop_words()
+    words = {}
+    categories = get_categories(df)
+    df_top_words = pd.DataFrame(columns=['phrase', 'sessions_count', 'category_id'])
+    for i, cat in enumerate(categories[:2], start=1):
+        sys.stdout.write('\r %i / %i processed\n' % (i, len(categories)))
+        for _, row in df[(df['category_id'] == cat)][['phrase', 'sessions_count']].dropna().iterrows():
+            for word in row['phrase'].split():
+                word = word.strip(punctuation).lower()
+                if word not in stop_words and len(word) > 3:
+                    words[word] = words.get(word, 0) + row['sessions_count']
+        top_words = sorted(words.items(), key=lambda x: x[1], reverse=True)[:conf.numberOfTopOccurredWords]
+        top_word_cat = pd.DataFrame(list(dict(top_words).items()),
+                                                        columns=['phrase', 'sessions_count'])
+        top_word_cat['category_id'] = cat
+        df_top_words = pd.concat([df_top_words, top_word_cat], ignore_index=True)
+    return df_top_words
 
 
-def categories_count(df):
-    return (len(df['category_id'].unique()))
+def get_categories(df):
+    return df['category_id'].unique()
 
 
 def run():
     phrase_cat = all_sq_to_df()
-    categoriesCount = categories_count(phrase_cat)
-    phrase_cat = replace_nan_by_empty(phrase_cat)
-    phrase_cat = concat_phrase_per_cat(phrase_cat)
-    commn.save_data_frame(occurrence_per_cat(phrase_cat), conf.columnsOfOccurredWords,
-                          'occurredWordsTop_' + str(conf.numberOfTopOccurredWords), transform=False)
+    # phrase_cat = replace_nan_by_empty(phrase_cat)
+    # phrase_cat = concat_phrase_per_cat(phrase_cat)
