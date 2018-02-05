@@ -9,14 +9,13 @@ import sys
 
 def all_sq_to_df():
     paths = commn.find_search_queries_paths()
-    result = pd.DataFrame([])
     for p in paths:
         print(p)
-        result = result.append(pd.read_csv(p, usecols=['phrase', 'category_id', 'sessions_count']))
+        result = pd.DataFrame([])
+        result = pd.read_csv(p, usecols=['phrase', 'category_id', 'sessions_count'])
         result = occurrence_per_cat(result)
         commn.save_data_frame(result, conf.columnsOfOccurredWords,
                               'occurredWordsTop_' + str(conf.numberOfTopOccurredWords) + p[-11:-4], transform=False)
-    return result
 
 
 def replace_nan_by_empty(df):
@@ -63,6 +62,6 @@ def get_categories(df):
 
 
 def run():
-    phrase_cat = all_sq_to_df()
+    all_sq_to_df()
     # phrase_cat = replace_nan_by_empty(phrase_cat)
     # phrase_cat = concat_phrase_per_cat(phrase_cat)
