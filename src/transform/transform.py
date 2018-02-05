@@ -95,9 +95,9 @@ def final_transformation():
         df = dropColumnsNotIn(df, ['id', 'category_id', 'title', 'description', 'has_phone', 'private_business',
                                    'predict_sold', 'predict_replies', 'predict_views', 'priceType', 'priceValue',
                                    'state', 'derivative', 'average', 'min', 'max', 'photo_sizes', 'paidads_id_index',
-                                   'paidads_valid_to'])
+                                   'paidads_valid_to', 'full_description'])
 
-        print('replacing dummies...\n')
+        print('replacing dummies...')
         df = replaceDummies(df, ['private_business', 'priceType', 'state'])
         # df.dropna(inplace=True)
         commn.save_data_frame(df, conf.finalTransformColumns, get_transformed_name_from_path(p), True)

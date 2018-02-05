@@ -52,8 +52,6 @@ def findCharIndexesInString(s, ch):
 def save_data_frame(df, columns, filename, transform=False):
     create_directory_if_not_exists(transformationDir)
     the_path = transformationDir + os.sep + filename + '.csv'
-    print(df.keys())
-    print(columns)
     try:
         pd.DataFrame(df[columns]).to_csv(the_path, index=False)
     except KeyError:
