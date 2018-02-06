@@ -1,0 +1,4 @@
+Photo sizes: ilość, max wielkosc (moze byc jako pole powierzchni x*y), ewentualnie srednia
+Predict sold: mapowanie z 't', 'f' na 1, 0
+Paidadsy (2 kolumny): mozna zrobic z tego jedna, jesli jest NaN to 0, jesli cos tam jest to 1.
+Tekst: pomysle po analizie
