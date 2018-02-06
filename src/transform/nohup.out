@@ -1,0 +1,9 @@
+./transform.py: 1: ./transform.py: import: not found
+./transform.py: 3: ./transform.py: import: not found
+./transform.py: 4: ./transform.py: import: not found
+./transform.py: 5: ./transform.py: import: not found
+from: can't read /var/mail/sklearn.linear_model
+./transform.py: 8: ./transform.py: import: not found
+./transform.py: 9: ./transform.py: import: not found
+./transform.py: 10: ./transform.py: import: not found
+./transform.py: 12: ./transform.py: Syntax error: "(" unexpected
