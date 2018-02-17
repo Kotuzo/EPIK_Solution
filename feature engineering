@@ -2,3 +2,7 @@ Photo sizes: ilość, max wielkosc (moze byc jako pole powierzchni x*y), ewentua
 Predict sold: mapowanie z 't', 'f' na 1, 0
 Paidadsy (2 kolumny): mozna zrobic z tego jedna, jesli jest NaN to 0, jesli cos tam jest to 1.
 Tekst: pomysle po analizie
+
+11.02 pierwsza wersja (taka prawdziwa):
+Must be: predict sold
+Nice to have: photo sizes, paidads
