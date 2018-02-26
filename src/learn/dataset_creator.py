@@ -4,7 +4,8 @@ from learn.features import (
     predict_sold_to_numbers,
     paid_ads,
     nb_photos,
-    photos_surface
+    photos_surface,
+    title_contains_phrase_100
 )
 
 
@@ -13,12 +14,13 @@ def pre_processing(data_frame):
     return data_frame
 
 
-@description_len(False)
-@full_description_len(False)
-@predict_sold_to_numbers(False)
-@paid_ads(True)
-@nb_photos(False)
-@photos_surface(True)
+#@description_len(False)
+#@full_description_len(False)
+#@predict_sold_to_numbers(False)
+#@paid_ads(True)
+#@nb_photos(False)
+#@photos_surface(True)
+@title_contains_phrase_100(False)
 def data_processor(data_frame):
     '''
     This function should be decorated with processing steps
@@ -28,10 +30,11 @@ def data_processor(data_frame):
 
 def post_processing(data_frame):
     print('postprocessing started.')
-    data_frame.drop(['used'], axis=1, inplace=True)
-    data_frame.drop(['business'], axis=1, inplace=True)
+    #data_frame.drop(['used'], axis=1, inplace=True)
+    #data_frame.drop(['business'], axis=1, inplace=True)
     #very high correlation with price
-    data_frame.drop(['arranged'], axis=1, inplace=True)
+    #data_frame.drop(['arranged'], axis=1, inplace=True)
+    data_frame.dropna(inplace=True)
     return data_frame
 
 

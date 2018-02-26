@@ -17,6 +17,7 @@ def description_len(drop=False):
         return inner
     return decorator
 
+
 def full_description_len(drop=False):
     def decorator(func):
         def inner(data_frame):
@@ -29,6 +30,7 @@ def full_description_len(drop=False):
             return func(data_frame)
         return inner
     return decorator
+
 
 def predict_sold_to_numbers(drop=False):
     def decorator(func):
@@ -43,6 +45,7 @@ def predict_sold_to_numbers(drop=False):
         return inner
     return decorator
 
+
 def paid_ads(drop=False):
     def decorator(func):
         def inner(data_frame):
@@ -55,6 +58,7 @@ def paid_ads(drop=False):
             return func(data_frame)
         return inner
     return decorator
+
 
 def nb_photos(drop=False):
     def decorator(func):
@@ -69,6 +73,7 @@ def nb_photos(drop=False):
         return inner
     return decorator
 
+
 def photos_surface(drop=False):
     def decorator(func):
         def inner(data_frame):
@@ -82,6 +87,7 @@ def photos_surface(drop=False):
         return inner
     return decorator
 
+
 #use only if there are nb_photos and photo_sizes features, dont use it now...
 def avg_photos_surface(drop=False):
     def decorator(func):
@@ -90,6 +96,20 @@ def avg_photos_surface(drop=False):
             if drop:
                 # if u want to drop original column, then do this
                 data_frame.drop(['photo_sizes'], axis=1, inplace=True)
+                pass
+            # call next step / function
+            return func(data_frame)
+        return inner
+    return decorator
+
+
+def title_contains_phrase_100(drop=False):
+    def decorator(func):
+        def inner(data_frame):
+            data_frame['title_contains_phrase_100'] = data_frame.apply(lambda row: title_transformation(row), axis=1)
+            if drop:
+                # if u want to drop original column, then do this
+                data_frame.drop(['title'], axis=1, inplace=True)
                 pass
             # call next step / function
             return func(data_frame)
